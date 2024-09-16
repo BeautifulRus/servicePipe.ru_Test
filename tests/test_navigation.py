@@ -237,8 +237,8 @@ def test_navigation_scrollToFormOnDemoProduct(browser_name, resolution):
             page.goto("https://servicepipe.ru/")
 
 
-        with allure.step('Шаг 2: Нажать на кнопку "Попробовать бесплатно"'):
-            page.click()
+        # with allure.step('Шаг 2: Нажать на кнопку "Попробовать бесплатно"'):
+
             # page.click('//*[@id="main"]/div[2]/div[1]/div/div/div/div/div/div[1]/button')
         # не придумал как проверить правильность скрола в конец страницы
 
