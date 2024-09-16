@@ -4,9 +4,10 @@ import pytest
 import allure
 from playwright.sync_api import sync_playwright
 
+
 @pytest.mark.parametrize("browser_name", ["chromium", "firefox"])
 @pytest.mark.parametrize("resolution", ["1024x768"])
-@pytest.mark.flaky #Поскольку, как я заметил, локаторы radix временами изменяются, и тест падает
+@pytest.mark.FLAKY #Поскольку, как я заметил, локаторы radix временами изменяются, и тест падает
 @pytest.mark.gui
 @pytest.mark.positive
 def test_navigation(browser_name, resolution):
@@ -19,7 +20,7 @@ def test_navigation(browser_name, resolution):
             page.goto("https://servicepipe.ru/")
 
         with allure.step("Шаг 2: Нажать на кнопку, открывающую списки"):
-            page.click('//*[@id="__next"]/nav/header/div/div[3]/nav/div[2]/button')
+            page.click('//*[@id="__next"]/nav/header/div/div[3]/nav/div[2]/button') #Без успешного клика тест упадёт
 
         # Создаем словарь с ожидаемыми ссылками
         expected_links = {
@@ -61,9 +62,14 @@ def test_navigation(browser_name, resolution):
         }
 
         # Проверяем ссылки "Решения"
-        with allure.step('Шаг: Нажать на список "Решения"'):
+        with allure.step('Шаг 3: Нажать на список "Решения"'):
             page.click('//*[@id="radix-:r0:"]')
-        with allure.step("Шаг: Проверить ссылки из списка \"Решения\" на корректность"):
+            page.wait_for_timeout(1000)
+            assert page.get_attribute('//*[@id="radix-:Rkl6:"]/div[2]/div/div/div/div/div[1]/div[2]/div[1]',
+                                      'data-state') == "open"
+
+
+        with allure.step("Шаг 4: Проверить ссылки из списка \"Решения\" на корректность"):
             for name, selector in expected_links["Решения"].items():
                 link = page.query_selector(selector)
                 if link:
@@ -72,9 +78,13 @@ def test_navigation(browser_name, resolution):
                     assert url.endswith(expected_url), f'Expected URL: {expected_url}, but got: {url}'
 
         # Проверяем ссылки "Технологии"
-        with allure.step('Шаг: Нажать на список "Технологии"'):
+        with allure.step('Шаг 5: Нажать на список "Технологии"'):
             page.click('//*[@id="radix-:r2:"]')
-        with allure.step("Шаг: Проверить ссылки из списка \"Технологии\" на корректность"):
+            page.wait_for_timeout(1000)
+            assert page.get_attribute('//*[@id="radix-:Rkl6:"]/div[2]/div/div/div/div/div[1]/div[2]/div[2]',
+                                      'data-state') == "open"
+
+        with allure.step("Шаг 6: Проверить ссылки из списка \"Технологии\" на корректность"):
             for name, selector in expected_links["Технологии"].items():
                 link = page.query_selector(selector)
                 if link:
@@ -86,9 +96,13 @@ def test_navigation(browser_name, resolution):
 
 
             # Проверяем ссылки "Продукты"
-        with allure.step('Шаг: Нажать на список "Продукты"'):
+        with allure.step('Шаг 7: Нажать на список "Продукты"'):
             page.click('//*[@id="radix-:r4:"]')
-        with allure.step("Шаг: Проверить ссылки из списка \"Продукты\" на корректность"):
+            page.wait_for_timeout(1000)
+            assert page.get_attribute('//*[@id="radix-:Rkl6:"]/div[2]/div/div/div/div/div[1]/div[2]/div[3]',
+                                      'data-state') == "open"
+
+        with allure.step("Шаг 8: Проверить ссылки из списка \"Продукты\" на корректность"):
             for name, selector in expected_links["Продукты"].items():
                 link = page.query_selector(selector)
                 if link:
@@ -98,9 +112,13 @@ def test_navigation(browser_name, resolution):
 
 
           # Проверяем ссылки "О компании"
-        with allure.step('Шаг: Нажать на список "О компании"'):
-            page.click('//*[@id="radix-:r5:"]')
-        with allure.step("Шаг: Проверить ссылки из списка \"О компании\" на корректность"):
+        with allure.step('Шаг 9: Нажать на список "О компании"'):
+            page.click('//*[@id="radix-:r6:"]')
+            page.wait_for_timeout(1000)
+            assert page.get_attribute('//*[@id="radix-:r6:"]', #сменил локатор, поскольку он иногда изменяется
+                                      'data-state') == "open" #ТЕСТ FLAKY
+
+        with allure.step("Шаг 10: Проверить ссылки из списка \"О компании\" на корректность"):
             for name, selector in expected_links["О компании"].items():
                 link = page.query_selector(selector)
                 if link:
