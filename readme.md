@@ -2,6 +2,7 @@
 Для этого, в териминал редактора скопируйте следующее: 
 
 python -m venv .venv
+
 pip install pytest~=8.3.3 allure-python-commons~=2.13.5 playwright~=1.47.0
 
 
